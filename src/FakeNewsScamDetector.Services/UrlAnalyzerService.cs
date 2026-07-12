@@ -8,10 +8,12 @@ public class UrlAnalyzerService : IUrlAnalyzerService
     private static readonly string[] UrlShorteners = ["bit.ly", "tinyurl.com", "t.co", "goo.gl", "is.gd"];
 
     private readonly IWhoisLookupClient _whoisClient;
+    private readonly ISafeBrowsingClient _safeBrowsingClient;
 
-    public UrlAnalyzerService(IWhoisLookupClient whoisClient)
+    public UrlAnalyzerService(IWhoisLookupClient whoisClient, ISafeBrowsingClient safeBrowsingClient)
     {
         _whoisClient = whoisClient;
+        _safeBrowsingClient = safeBrowsingClient;
     }
 
     public async Task<(double Score, List<string> Reasons)> AnalyzeUrlRiskAsync(string url)
@@ -78,6 +80,13 @@ public class UrlAnalyzerService : IUrlAnalyzerService
                 risk += 0.15;
                 reasons.Add($"Domain was registered {domainAgeDays} days ago, relatively recently");
             }
+        }
+
+        var safeBrowsingResult = await _safeBrowsingClient.CheckUrlAsync(url);
+        if (safeBrowsingResult.IsFlagged)
+        {
+            risk += 0.60;
+            reasons.Add($"Google Safe Browsing has flagged this URL ({string.Join(", ", safeBrowsingResult.ThreatTypes)})");
         }
 
         return (Math.Min(risk, 1.0), reasons);

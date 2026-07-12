@@ -8,15 +8,19 @@ namespace FakeNewsScamDetector.Tests;
 public class UrlAnalyzerServiceTests
 {
     private readonly Mock<IWhoisLookupClient> _whoisClient = new();
+    private readonly Mock<ISafeBrowsingClient> _safeBrowsingClient = new();
     private readonly UrlAnalyzerService _analyzer;
 
     public UrlAnalyzerServiceTests()
     {
-        // Default: WHOIS lookup returns "unknown" so tests are fast and
-        // deterministic, isolated from the real network.
+        // Defaults: WHOIS returns "unknown" and Safe Browsing reports "not
+        // flagged", so tests are fast, deterministic, and isolated from the
+        // real network/API.
         _whoisClient.Setup(w => w.GetDomainAgeInDaysAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((int?)null);
-        _analyzer = new UrlAnalyzerService(_whoisClient.Object);
+        _safeBrowsingClient.Setup(s => s.CheckUrlAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new SafeBrowsingResult(false, []));
+        _analyzer = new UrlAnalyzerService(_whoisClient.Object, _safeBrowsingClient.Object);
     }
 
     [Fact]
@@ -67,5 +71,17 @@ public class UrlAnalyzerServiceTests
 
         Assert.Equal(0, risk);
         Assert.Empty(reasons);
+    }
+
+    [Fact]
+    public async Task AnalyzeUrlRiskAsync_WithSafeBrowsingFlagged_AddsHighRiskAndReason()
+    {
+        _safeBrowsingClient.Setup(s => s.CheckUrlAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new SafeBrowsingResult(true, ["SOCIAL_ENGINEERING"]));
+
+        var (risk, reasons) = await _analyzer.AnalyzeUrlRiskAsync("https://www.example.com");
+
+        Assert.True(risk >= 0.6);
+        Assert.Contains(reasons, r => r.Contains("Safe Browsing") && r.Contains("SOCIAL_ENGINEERING"));
     }
 }
