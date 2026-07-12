@@ -1,50 +1,81 @@
 @model FakeNewsScamDetector.Core.Entities.AnalysisResult
 @{
     ViewData["Title"] = "Analysis Result";
-    var verdictClass = Model.Verdict switch
+    var verdictSlug = Model.Verdict.ToString().ToLowerInvariant();
+    var verdictAlertClass = Model.Verdict switch
     {
         FakeNewsScamDetector.Core.Enums.VerdictType.Legitimate => "success",
         FakeNewsScamDetector.Core.Enums.VerdictType.Suspicious => "warning",
         _ => "danger"
     };
+    var verdictIcon = Model.Verdict switch
+    {
+        FakeNewsScamDetector.Core.Enums.VerdictType.Legitimate => "&#9989;",
+        FakeNewsScamDetector.Core.Enums.VerdictType.Suspicious => "&#9888;&#65039;",
+        _ => "&#128680;"
+    };
 }
 
-<h1 class="mb-3">Analysis Result</h1>
+<div style="max-width: 720px; margin: 0 auto;">
+    <h1 class="mb-3">Analysis Result</h1>
 
-<div class="alert alert-@verdictClass">
-    <strong>Verdict: @Model.Verdict</strong> &mdash; Confidence: @Model.ConfidenceScore.ToString("P0")
-</div>
+    <div class="alert alert-@verdictAlertClass mb-4">
+        <span class="verdict-badge verdict-@verdictSlug">@Html.Raw(verdictIcon) @Model.Verdict</span>
+        &nbsp;&mdash;&nbsp; Confidence: <strong>@Model.ConfidenceScore.ToString("P0")</strong>
+    </div>
 
-<dl class="row">
-    <dt class="col-sm-3">Analyzed text</dt>
-    <dd class="col-sm-9">@Model.InputText</dd>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="mb-3" style="font-size: 1rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted);">Score Breakdown</h5>
 
-    @if (Model.InputUrl is not null)
+            <div class="score-row">
+                <span class="score-label">ML Model</span>
+                <div class="score-track"><div class="score-fill" style="width: @(Model.MlScore * 100)%;"></div></div>
+                <span class="score-value">@Model.MlScore.ToString("P0")</span>
+            </div>
+            <div class="score-row">
+                <span class="score-label">Rule Engine</span>
+                <div class="score-track"><div class="score-fill" style="width: @(Model.RuleScore * 100)%;"></div></div>
+                <span class="score-value">@Model.RuleScore.ToString("P0")</span>
+            </div>
+            @if (Model.InputUrl is not null)
+            {
+                <div class="score-row">
+                    <span class="score-label">URL Risk</span>
+                    <div class="score-track"><div class="score-fill" style="width: @(Model.UrlRiskScore * 100)%;"></div></div>
+                    <span class="score-value">@Model.UrlRiskScore.ToString("P0")</span>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="mb-3" style="font-size: 1rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted);">Analyzed Content</h5>
+            <p style="white-space: pre-wrap;">@Model.InputText</p>
+            @if (Model.InputUrl is not null)
+            {
+                <p class="text-muted mb-0"><strong>Detected URL:</strong> @Model.InputUrl</p>
+            }
+            <p class="text-muted mb-0"><strong>Analyzed:</strong> @Model.AnalyzedAtUtc.ToString("u")</p>
+        </div>
+    </div>
+
+    @if (Model.Reasons.Count > 0)
     {
-        <dt class="col-sm-3">Detected URL</dt>
-        <dd class="col-sm-9">@Model.InputUrl (risk: @Model.UrlRiskScore.ToString("P0"))</dd>
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="mb-3" style="font-size: 1rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted);">Why This Verdict</h5>
+                <ul class="mb-0" style="padding-left: 1.2rem;">
+                    @foreach (var reason in Model.Reasons)
+                    {
+                        <li class="mb-1">@reason</li>
+                    }
+                </ul>
+            </div>
+        </div>
     }
 
-    <dt class="col-sm-3">ML score</dt>
-    <dd class="col-sm-9">@Model.MlScore.ToString("P0")</dd>
-
-    <dt class="col-sm-3">Rule score</dt>
-    <dd class="col-sm-9">@Model.RuleScore.ToString("P0")</dd>
-
-    <dt class="col-sm-3">Analyzed at</dt>
-    <dd class="col-sm-9">@Model.AnalyzedAtUtc.ToString("u")</dd>
-</dl>
-
-@if (Model.Reasons.Count > 0)
-{
-    <h5>Reasons</h5>
-    <ul>
-        @foreach (var reason in Model.Reasons)
-        {
-            <li>@reason</li>
-        }
-    </ul>
-}
-
-<a asp-controller="Analysis" asp-action="Index" class="btn btn-primary">Analyze Another</a>
-<a asp-controller="Analysis" asp-action="History" class="btn btn-outline-secondary">View History</a>
+    <a asp-controller="Analysis" asp-action="Index" class="btn btn-primary">Analyze Another</a>
+    <a asp-controller="Analysis" asp-action="History" class="btn btn-outline-secondary">View History</a>
+</div>

@@ -3,18 +3,24 @@
     ViewData["Title"] = "Analyze";
 }
 
-<h1 class="mb-3">Analyze Text or URL</h1>
-<p class="text-muted">Paste a message, news snippet, or link below to check it for scam and fake-news signals.</p>
+<div style="max-width: 640px; margin: 0 auto;">
+    <h1 class="mb-2">Analyze Text or URL</h1>
+    <p class="text-muted mb-4">Paste a message, news snippet, or link below to check it for scam and fake-news signals.</p>
 
-<form asp-controller="Analysis" asp-action="Analyze" method="post" class="mt-4">
-    @Html.AntiForgeryToken()
-    <div class="mb-3">
-        <label asp-for="InputText" class="form-label">Text to analyze</label>
-        <textarea asp-for="InputText" class="form-control" rows="8" placeholder="Paste text, a message, or a URL here..."></textarea>
-        <span asp-validation-for="InputText" class="text-danger"></span>
+    <div class="card">
+        <div class="card-body">
+            <form asp-controller="Analysis" asp-action="Analyze" method="post">
+                @Html.AntiForgeryToken()
+                <div class="mb-3">
+                    <label asp-for="InputText" class="form-label">Text to analyze</label>
+                    <textarea asp-for="InputText" class="form-control" rows="8" placeholder="Paste text, a message, or a URL here..."></textarea>
+                    <span asp-validation-for="InputText" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary">Analyze</button>
+            </form>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary">Analyze</button>
-</form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -1,9 +1,28 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Fake News &amp; Scam Detector</h1>
-    <p class="lead">Paste a message, news snippet, or URL and get an instant risk assessment powered by ML and rule-based heuristics.</p>
-    <a asp-controller="Analysis" asp-action="Index" class="btn btn-primary btn-lg mt-3">Analyze Text or URL</a>
+<div class="hero">
+    <span class="hero-eyebrow">ML + Rule-Based Detection</span>
+    <h1>Spot scams and fake news<br>before they spot you.</h1>
+    <p class="lead">Paste a message, news snippet, or link. Truthlens checks it against a trained classifier, a scam-pattern rule engine, and URL risk heuristics &mdash; and tells you exactly why.</p>
+    <a asp-controller="Analysis" asp-action="Index" class="btn btn-primary btn-lg">Analyze Text or URL &rarr;</a>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="feature-icon">&#129504;</div>
+            <h3>ML-Powered Scoring</h3>
+            <p>An ML.NET classifier trained on labeled examples flags language patterns typical of fake news and scam messaging.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#128269;</div>
+            <h3>Rule-Based Signals</h3>
+            <p>A weighted keyword engine catches classic red flags &mdash; urgency, gift cards, wire transfers, and more.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">&#128279;</div>
+            <h3>URL Risk Analysis</h3>
+            <p>Links are checked for suspicious TLDs, IP-literal hosts, shorteners, and other structural red flags.</p>
+        </div>
+    </div>
 </div>

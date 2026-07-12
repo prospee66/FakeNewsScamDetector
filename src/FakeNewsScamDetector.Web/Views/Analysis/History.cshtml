@@ -7,7 +7,12 @@
 
 @if (Model.Count == 0)
 {
-    <p class="text-muted">No analyses yet. <a asp-controller="Analysis" asp-action="Index">Run your first one</a>.</p>
+    <div class="card">
+        <div class="card-body text-center py-5">
+            <p class="text-muted mb-3">No analyses yet.</p>
+            <a asp-controller="Analysis" asp-action="Index" class="btn btn-primary">Run your first analysis</a>
+        </div>
+    </div>
 }
 else
 {
@@ -24,12 +29,13 @@ else
         <tbody>
             @foreach (var item in Model)
             {
+                var verdictSlug = item.Verdict.ToString().ToLowerInvariant();
                 <tr>
-                    <td>@item.AnalyzedAtUtc.ToString("g")</td>
-                    <td>@(item.InputText.Length > 80 ? item.InputText[..80] + "…" : item.InputText)</td>
-                    <td>@item.Verdict</td>
+                    <td class="text-muted">@item.AnalyzedAtUtc.ToString("g")</td>
+                    <td>@(item.InputText.Length > 70 ? item.InputText[..70] + "…" : item.InputText)</td>
+                    <td><span class="verdict-badge verdict-@verdictSlug">@item.Verdict</span></td>
                     <td>@item.ConfidenceScore.ToString("P0")</td>
-                    <td><a asp-controller="Analysis" asp-action="Result" asp-route-id="@item.Id">View</a></td>
+                    <td><a asp-controller="Analysis" asp-action="Result" asp-route-id="@item.Id">View &rarr;</a></td>
                 </tr>
             }
         </tbody>
