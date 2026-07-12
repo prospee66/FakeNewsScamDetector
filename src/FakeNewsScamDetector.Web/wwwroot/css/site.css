@@ -54,8 +54,11 @@ body {
   margin: 0;
   font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
   color: var(--color-text);
-  background: var(--color-bg);
+  background-color: var(--color-bg);
+  background-image: radial-gradient(rgba(91, 75, 245, 0.09) 1px, transparent 1px);
+  background-size: 22px 22px;
   min-height: 100vh;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -322,6 +325,34 @@ a:hover {
   padding: 4.5rem 1rem 3.5rem;
 }
 
+.hero-intro {
+  position: relative;
+  padding: 1rem 1rem 2rem;
+}
+
+.hero-intro::before,
+.hero-intro::after {
+  content: "";
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  filter: blur(90px);
+  z-index: -1;
+  top: -230px;
+  left: 50%;
+}
+
+.hero-intro::before {
+  background: radial-gradient(circle, rgba(139, 125, 251, 0.45), transparent 70%);
+  transform: translateX(-85%);
+}
+
+.hero-intro::after {
+  background: radial-gradient(circle, rgba(91, 75, 245, 0.4), transparent 70%);
+  transform: translateX(10%);
+}
+
 .hero .hero-eyebrow {
   display: inline-block;
   background: var(--color-primary-soft);
@@ -341,11 +372,41 @@ a:hover {
   line-height: 1.1;
 }
 
+.hero h1 .accent {
+  background: linear-gradient(135deg, var(--color-primary), #8b7dfb);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
 .hero .lead {
   font-size: 1.15rem;
   color: var(--color-text-muted);
   max-width: 640px;
   margin: 0 auto 2rem;
+}
+
+.hero-trust {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.hero-trust span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.hero-trust .icon {
+  width: 16px;
+  height: 16px;
+  color: var(--color-success);
 }
 
 .feature-grid {
@@ -362,14 +423,22 @@ a:hover {
   padding: 1.75rem 1.5rem;
   text-align: left;
   box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary-soft);
 }
 
 .feature-card .feature-icon {
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  background: var(--color-primary-soft);
-  color: var(--color-primary-dark);
+  background: linear-gradient(135deg, var(--color-primary), #8b7dfb);
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(91, 75, 245, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
