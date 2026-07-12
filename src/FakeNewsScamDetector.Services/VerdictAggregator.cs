@@ -29,7 +29,9 @@ public class VerdictAggregator
         var fakeNewsScore = await _classifier.PredictFakeNewsScoreAsync(textOnly);
         var scamScore = await _classifier.PredictScamScoreAsync(textOnly);
         var (ruleScore, ruleReasons) = _ruleEngine.EvaluateText(textOnly);
-        var urlRisk = url is not null ? await _urlAnalyzer.AnalyzeUrlRiskAsync(url) : 0.0;
+        var (urlRisk, urlReasons) = url is not null
+            ? await _urlAnalyzer.AnalyzeUrlRiskAsync(url)
+            : (0.0, new List<string>());
 
         var mlScore = Math.Max(fakeNewsScore, scamScore);
         var confidence = (mlScore * 0.5) + (ruleScore * 0.3) + (urlRisk * 0.2);
@@ -37,8 +39,7 @@ public class VerdictAggregator
         var verdict = DetermineVerdict(confidence, fakeNewsScore, scamScore);
 
         var reasons = new List<string>(ruleReasons);
-        if (url is not null && urlRisk >= 0.4)
-            reasons.Add($"URL '{url}' shows risk indicators (score {urlRisk:P0})");
+        reasons.AddRange(urlReasons);
         if (fakeNewsScore >= 0.6)
             reasons.Add($"Text patterns resemble known fake news (score {fakeNewsScore:P0})");
         if (scamScore >= 0.6)

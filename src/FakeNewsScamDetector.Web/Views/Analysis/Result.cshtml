@@ -8,15 +8,24 @@
         FakeNewsScamDetector.Core.Enums.VerdictType.Suspicious => "warning",
         _ => "danger"
     };
+    var confidenceTier = Model.ConfidenceScore switch
+    {
+        < 0.45 => "Low confidence",
+        < 0.7 => "Medium confidence",
+        _ => "High confidence"
+    };
 }
 
 <div style="max-width: 720px; margin: 0 auto;">
     <h1 class="mb-3">Analysis Result</h1>
 
-    <div class="alert alert-@verdictAlertClass mb-4">
+    <div class="alert alert-@verdictAlertClass mb-2">
         <span class="verdict-badge verdict-@verdictSlug">@Html.Raw(IconHelper.VerdictIcon(Model.Verdict)) @Model.Verdict</span>
-        &nbsp;&mdash;&nbsp; Confidence: <strong>@Model.ConfidenceScore.ToString("P0")</strong>
+        &nbsp;&mdash;&nbsp; @confidenceTier (@Model.ConfidenceScore.ToString("P0"))
     </div>
+    <p class="text-muted mb-4" style="font-size: 0.88rem;">
+        This is an automated pattern-matching signal, not a fact-check or a guarantee. Treat it as a prompt to look closer, not a final answer &mdash; verify independently before acting, especially for anything financial or time-pressured.
+    </p>
 
     <div class="card mb-4">
         <div class="card-body">
