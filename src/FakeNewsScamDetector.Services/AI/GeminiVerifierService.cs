@@ -26,7 +26,7 @@ public class GeminiVerifierService : IConversationalVerifierService
         _httpClient = httpClient;
         _logger = logger;
         _apiKey = configuration["Gemini:ApiKey"];
-        _model = configuration["Gemini:Model"] ?? "gemini-2.5-flash";
+        _model = configuration["Gemini:Model"] ?? "gemini-flash-latest";
     }
 
     public async Task<string> AskAsync(List<ChatMessage> conversation, CancellationToken cancellationToken = default)
