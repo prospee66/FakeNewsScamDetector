@@ -1,0 +1,42 @@
+@model FakeNewsScamDetector.Web.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h1 class="mb-3">Dashboard</h1>
+
+<div class="row text-center mb-4">
+    <div class="col">
+        <div class="card"><div class="card-body"><h5>@Model.TotalAnalyzed</h5><p class="text-muted mb-0">Total Analyzed</p></div></div>
+    </div>
+    <div class="col">
+        <div class="card"><div class="card-body"><h5 class="text-success">@Model.LegitimateCount</h5><p class="text-muted mb-0">Legitimate</p></div></div>
+    </div>
+    <div class="col">
+        <div class="card"><div class="card-body"><h5 class="text-warning">@Model.SuspiciousCount</h5><p class="text-muted mb-0">Suspicious</p></div></div>
+    </div>
+    <div class="col">
+        <div class="card"><div class="card-body"><h5 class="text-danger">@Model.ScamCount</h5><p class="text-muted mb-0">Scam</p></div></div>
+    </div>
+    <div class="col">
+        <div class="card"><div class="card-body"><h5 class="text-danger">@Model.FakeNewsCount</h5><p class="text-muted mb-0">Fake News</p></div></div>
+    </div>
+</div>
+
+<h4>Recent Results</h4>
+<table class="table table-striped">
+    <thead>
+        <tr><th>Date</th><th>Text</th><th>Verdict</th><th>Confidence</th></tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.RecentResults)
+        {
+            <tr>
+                <td>@item.AnalyzedAtUtc.ToString("g")</td>
+                <td>@(item.InputText.Length > 60 ? item.InputText[..60] + "…" : item.InputText)</td>
+                <td>@item.Verdict</td>
+                <td>@item.ConfidenceScore.ToString("P0")</td>
+            </tr>
+        }
+    </tbody>
+</table>

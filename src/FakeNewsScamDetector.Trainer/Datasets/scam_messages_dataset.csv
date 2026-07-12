@@ -1,0 +1,21 @@
+Text,IsScam
+"Hi mom, can we still meet for lunch on Saturday?",false
+"Your package has shipped and is expected to arrive Thursday.",false
+"Congratulations! You have been selected to win a free iPhone, click here immediately to claim.",true
+"URGENT: Your bank account has been suspended, verify your account now or lose access.",true
+"Reminder: your dentist appointment is scheduled for tomorrow at 2pm.",false
+"Send us a gift card of $500 immediately to release your inheritance funds.",true
+"Thanks for the great meeting today, I'll send the notes shortly.",false
+"You have won the international lottery! Provide your social security number to claim your prize.",true
+"Team standup moved to 10am tomorrow, see calendar invite.",false
+"This is the IRS, act now or face arrest, wire transfer required today.",true
+"Can you review the attached document before our call?",false
+"Your Netflix account has a billing issue, click here to update payment immediately.",true
+"Happy birthday! Hope you have a wonderful day.",false
+"I am a prince with a large inheritance, I need your help transferring funds via wire transfer.",true
+"The quarterly report is ready for your review in the shared drive.",false
+"Your computer has a virus, call this number immediately or your files will be deleted.",true
+"Let's catch up over coffee next week if you're free.",false
+"Bitcoin investment opportunity: double your money in 24 hours, act now!",true
+"The plumber will arrive between 9 and 11am tomorrow.",false
+"Your account has been suspended due to suspicious activity, verify your account immediately.",true

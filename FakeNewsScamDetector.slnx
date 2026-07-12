@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/FakeNewsScamDetector.Core/FakeNewsScamDetector.Core.csproj" />
+    <Project Path="src/FakeNewsScamDetector.Data/FakeNewsScamDetector.Data.csproj" />
+    <Project Path="src/FakeNewsScamDetector.ML/FakeNewsScamDetector.ML.csproj" />
+    <Project Path="src/FakeNewsScamDetector.Services/FakeNewsScamDetector.Services.csproj" />
+    <Project Path="src/FakeNewsScamDetector.Trainer/FakeNewsScamDetector.Trainer.csproj" />
+    <Project Path="src/FakeNewsScamDetector.Web/FakeNewsScamDetector.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/FakeNewsScamDetector.Tests/FakeNewsScamDetector.Tests.csproj" />
+  </Folder>
+</Solution>

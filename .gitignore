@@ -1,0 +1,31 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+
+## Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+## SQLite runtime databases
+*.db
+*.db-shm
+*.db-wal
+
+## Visual Studio / Rider / VS Code
+.vs/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+*.DotSettings.user
+
+## NuGet
+*.nupkg
+**/packages/*
+
+## Test results
+[Tt]est[Rr]esult*/
