@@ -12,19 +12,22 @@ public class ScamTextModelTrainer
         IDataView data = _mlContext.Data.LoadFromTextFile<ScamInputData>(
             datasetPath, hasHeader: true, separatorChar: ',', allowQuoting: true);
 
-        var split = _mlContext.Data.TrainTestSplit(data, testFraction: 0.2);
+        var result = BinaryTextClassifierTrainer.TrainBest(
+            _mlContext, data, nameof(ScamInputData.Text), nameof(ScamInputData.IsScam));
 
-        var pipeline = _mlContext.Transforms.Text
-            .FeaturizeText("Features", nameof(ScamInputData.Text))
-            .Append(_mlContext.Transforms.CopyColumns("Label", nameof(ScamInputData.IsScam)))
-            .Append(_mlContext.BinaryClassification.Trainers.FastTree());
+        var report = ModelMetricsReport.From(result.AlgorithmName, result.Metrics);
+        Console.WriteLine("  Scam Text Model:");
+        report.Print();
 
-        var model = pipeline.Fit(split.TrainSet);
+        var previous = ModelMetricsReport.Load(modelOutputPath);
+        if (previous is not null && previous.Auc >= report.Auc)
+        {
+            Console.WriteLine($"    Skipped save: new AUC ({report.Auc:P2}) does not beat existing model ({previous.Auc:P2}).");
+            return;
+        }
 
-        var predictions = model.Transform(split.TestSet);
-        var metrics = _mlContext.BinaryClassification.Evaluate(predictions);
-        Console.WriteLine($"Scam Text Model — Accuracy: {metrics.Accuracy:P2}, F1: {metrics.F1Score:P2}");
-
-        _mlContext.Model.Save(model, data.Schema, modelOutputPath);
+        _mlContext.Model.Save(result.Model, result.Schema, modelOutputPath);
+        report.Save(modelOutputPath);
+        Console.WriteLine($"    Saved to {modelOutputPath}");
     }
 }

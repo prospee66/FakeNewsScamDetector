@@ -21,9 +21,12 @@ builder.Services.AddScoped<VerdictAggregator>();
 builder.Services.AddSingleton<ITextClassifierService>(sp =>
 {
     var config = sp.GetRequiredService<IConfiguration>();
-    var env = sp.GetRequiredService<IWebHostEnvironment>();
-    var fakeNewsModelPath = Path.Combine(env.ContentRootPath, config["MlModels:FakeNewsModelPath"] ?? string.Empty);
-    var scamModelPath = Path.Combine(env.ContentRootPath, config["MlModels:ScamModelPath"] ?? string.Empty);
+    // The model .zip files are copied next to the built assembly (see the
+    // Content item in the .csproj), not into the source content root — use
+    // AppContext.BaseDirectory so this resolves correctly regardless of the
+    // working directory the app was launched from.
+    var fakeNewsModelPath = Path.Combine(AppContext.BaseDirectory, config["MlModels:FakeNewsModelPath"] ?? string.Empty);
+    var scamModelPath = Path.Combine(AppContext.BaseDirectory, config["MlModels:ScamModelPath"] ?? string.Empty);
     return new TextClassifierService(fakeNewsModelPath, scamModelPath);
 });
 

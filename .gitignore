@@ -29,3 +29,6 @@ x86/
 
 ## Test results
 [Tt]est[Rr]esult*/
+
+## Claude Code harness-internal files
+.claude/

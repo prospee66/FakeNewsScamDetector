@@ -1,0 +1,10 @@
+{
+  "AlgorithmName": "SdcaLogisticRegression",
+  "Accuracy": 0.6172644856129287,
+  "Auc": 0.6596189678713951,
+  "Auprc": 0.5949633108477203,
+  "F1Score": 0.5667112896028559,
+  "PositivePrecision": 0.5731046931407943,
+  "PositiveRecall": 0.560458958517211,
+  "TrainedAtUtc": "2026-07-12T18:38:08.916188Z"
+}
