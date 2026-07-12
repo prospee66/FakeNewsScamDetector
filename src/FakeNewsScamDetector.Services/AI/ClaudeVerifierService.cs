@@ -7,36 +7,15 @@ namespace FakeNewsScamDetector.Services.AI;
 
 /// <summary>
 /// Conducts a conversational verification chat via the Anthropic Messages API.
-/// Placeholder system prompt below — replace once the real one is supplied.
-/// Ends its own turn with a "VERDICT: &lt;Legitimate|Suspicious|Scam|FakeNews&gt;"
-/// line when it reaches a conclusion, which ChatController parses to decide
-/// whether the conversation is complete and should be saved.
+/// Not currently wired up in Program.cs (superseded by GeminiVerifierService,
+/// which has a genuine free tier) — kept as a working, tested alternative
+/// implementation of IConversationalVerifierService in case Claude access is
+/// added later.
 /// </summary>
 public class ClaudeVerifierService : IConversationalVerifierService
 {
     private const string AnthropicVersion = "2023-06-01";
     private const string MessagesEndpoint = "https://api.anthropic.com/v1/messages";
-
-    private const string DefaultSystemPrompt = """
-        You are a conversational fact-checking and scam-verification assistant
-        embedded in a scam and fake-news detection tool. Help the user reason
-        through a suspicious message, claim, or link by asking clarifying
-        questions (who sent it, is there a link, what platform, any red flags
-        they've already noticed) before drawing a conclusion.
-
-        Do not claim certainty you do not have. Be explicit about uncertainty
-        and about what would change your assessment. This is a decision-support
-        conversation, not a final verdict on truth or safety — say so if the
-        user seems to be treating your answer as one.
-
-        When, and only when, you have enough information to reach a
-        conclusion, end your message with exactly one line, on its own line,
-        in this exact format:
-        VERDICT: <Legitimate|Suspicious|Scam|FakeNews>
-
-        Do not include that line in clarifying questions or intermediate
-        messages — only in the message where you are ready to conclude.
-        """;
 
     private readonly HttpClient _httpClient;
     private readonly ILogger<ClaudeVerifierService> _logger;
@@ -64,7 +43,7 @@ public class ClaudeVerifierService : IConversationalVerifierService
             var request = new AnthropicRequest(
                 _model,
                 1024,
-                DefaultSystemPrompt,
+                VerificationSystemPrompt.Text,
                 conversation.Select(m => new AnthropicMessage(m.Role, m.Content)).ToList());
 
             using var httpRequest = new HttpRequestMessage(HttpMethod.Post, MessagesEndpoint);

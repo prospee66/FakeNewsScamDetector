@@ -20,7 +20,7 @@ builder.Services.AddScoped<IScamRuleEngine, ScamRuleEngine>();
 builder.Services.AddSingleton<IWhoisLookupClient, WhoisLookupClient>();
 builder.Services.AddHttpClient<ISafeBrowsingClient, SafeBrowsingClient>();
 builder.Services.AddHttpClient<IFactCheckClient, FactCheckClient>();
-builder.Services.AddHttpClient<IConversationalVerifierService, ClaudeVerifierService>();
+builder.Services.AddHttpClient<IConversationalVerifierService, GeminiVerifierService>();
 builder.Services.AddScoped<IUrlAnalyzerService, UrlAnalyzerService>();
 builder.Services.AddScoped<VerdictAggregator>();
 
