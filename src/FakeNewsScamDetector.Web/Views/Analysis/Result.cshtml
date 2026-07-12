@@ -14,6 +14,7 @@
         < 0.7 => "Medium confidence",
         _ => "High confidence"
     };
+    var isChatDerived = Model.ConversationTranscript.Count > 0;
 }
 
 <div style="max-width: 720px; margin: 0 auto;">
@@ -49,30 +50,46 @@
         </div>
     }
 
-    <div class="card mb-4">
-        <div class="card-body">
-            <h5 class="mb-3" style="font-size: 1rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted);">Score Breakdown</h5>
+    @if (!isChatDerived)
+    {
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="mb-3" style="font-size: 1rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted);">Score Breakdown</h5>
 
-            <div class="score-row">
-                <span class="score-label">ML Model</span>
-                <div class="score-track"><div class="score-fill" style="width: @(Model.MlScore * 100)%;"></div></div>
-                <span class="score-value">@Model.MlScore.ToString("P0")</span>
-            </div>
-            <div class="score-row">
-                <span class="score-label">Rule Engine</span>
-                <div class="score-track"><div class="score-fill" style="width: @(Model.RuleScore * 100)%;"></div></div>
-                <span class="score-value">@Model.RuleScore.ToString("P0")</span>
-            </div>
-            @if (Model.InputUrl is not null)
-            {
                 <div class="score-row">
-                    <span class="score-label">URL Risk</span>
-                    <div class="score-track"><div class="score-fill" style="width: @(Model.UrlRiskScore * 100)%;"></div></div>
-                    <span class="score-value">@Model.UrlRiskScore.ToString("P0")</span>
+                    <span class="score-label">ML Model</span>
+                    <div class="score-track"><div class="score-fill" style="width: @(Model.MlScore * 100)%;"></div></div>
+                    <span class="score-value">@Model.MlScore.ToString("P0")</span>
                 </div>
-            }
+                <div class="score-row">
+                    <span class="score-label">Rule Engine</span>
+                    <div class="score-track"><div class="score-fill" style="width: @(Model.RuleScore * 100)%;"></div></div>
+                    <span class="score-value">@Model.RuleScore.ToString("P0")</span>
+                </div>
+                @if (Model.InputUrl is not null)
+                {
+                    <div class="score-row">
+                        <span class="score-label">URL Risk</span>
+                        <div class="score-track"><div class="score-fill" style="width: @(Model.UrlRiskScore * 100)%;"></div></div>
+                        <span class="score-value">@Model.UrlRiskScore.ToString("P0")</span>
+                    </div>
+                }
+            </div>
         </div>
-    </div>
+    }
+    else
+    {
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="mb-3" style="font-size: 1rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted);">AI Conversation Transcript</h5>
+                <p class="text-muted mb-3" style="font-size: 0.85rem;">This verdict came from a chat with the AI assistant, not the scored ML/rule pipeline &mdash; there's no comparable percentage breakdown to show.</p>
+                @foreach (var line in Model.ConversationTranscript)
+                {
+                    <p class="mb-2" style="white-space: pre-wrap;">@line</p>
+                }
+            </div>
+        </div>
+    }
 
     <div class="card mb-4">
         <div class="card-body">

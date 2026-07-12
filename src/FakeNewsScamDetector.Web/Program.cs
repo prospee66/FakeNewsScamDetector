@@ -3,6 +3,7 @@ using FakeNewsScamDetector.Data;
 using FakeNewsScamDetector.Data.Repositories;
 using FakeNewsScamDetector.ML.Prediction;
 using FakeNewsScamDetector.Services;
+using FakeNewsScamDetector.Services.AI;
 using FakeNewsScamDetector.Services.ExternalApis;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,7 @@ builder.Services.AddScoped<IScamRuleEngine, ScamRuleEngine>();
 builder.Services.AddSingleton<IWhoisLookupClient, WhoisLookupClient>();
 builder.Services.AddHttpClient<ISafeBrowsingClient, SafeBrowsingClient>();
 builder.Services.AddHttpClient<IFactCheckClient, FactCheckClient>();
+builder.Services.AddHttpClient<IConversationalVerifierService, ClaudeVerifierService>();
 builder.Services.AddScoped<IUrlAnalyzerService, UrlAnalyzerService>();
 builder.Services.AddScoped<VerdictAggregator>();
 

@@ -42,6 +42,18 @@ public class AppDbContext : DbContext
                 v => v.Aggregate(0, (hash, f) => HashCode.Combine(hash, f.ClaimText, f.Publisher, f.TextualRating, f.ReviewUrl)),
                 v => v.ToList()));
 
+        modelBuilder.Entity<AnalysisResult>()
+            .Property(a => a.ConversationTranscript)
+            .HasConversion(
+                lines => JsonSerializer.Serialize(lines, (JsonSerializerOptions?)null),
+                json => string.IsNullOrEmpty(json)
+                    ? new List<string>()
+                    : JsonSerializer.Deserialize<List<string>>(json, (JsonSerializerOptions?)null) ?? new List<string>())
+            .Metadata.SetValueComparer(new ValueComparer<List<string>>(
+                (a, b) => (a ?? new()).SequenceEqual(b ?? new()),
+                v => v.Aggregate(0, (hash, s) => HashCode.Combine(hash, s.GetHashCode())),
+                v => v.ToList()));
+
         ScamPatternSeed.Seed(modelBuilder);
     }
 }

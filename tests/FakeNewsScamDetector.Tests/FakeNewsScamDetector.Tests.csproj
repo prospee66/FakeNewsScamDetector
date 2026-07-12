@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\FakeNewsScamDetector.Services\FakeNewsScamDetector.Services.csproj" />
     <ProjectReference Include="..\..\src\FakeNewsScamDetector.ML\FakeNewsScamDetector.ML.csproj" />
+    <ProjectReference Include="..\..\src\FakeNewsScamDetector.Web\FakeNewsScamDetector.Web.csproj" />
   </ItemGroup>
 
 </Project>
