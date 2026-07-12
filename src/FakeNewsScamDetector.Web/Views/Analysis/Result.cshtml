@@ -8,19 +8,13 @@
         FakeNewsScamDetector.Core.Enums.VerdictType.Suspicious => "warning",
         _ => "danger"
     };
-    var verdictIcon = Model.Verdict switch
-    {
-        FakeNewsScamDetector.Core.Enums.VerdictType.Legitimate => "&#9989;",
-        FakeNewsScamDetector.Core.Enums.VerdictType.Suspicious => "&#9888;&#65039;",
-        _ => "&#128680;"
-    };
 }
 
 <div style="max-width: 720px; margin: 0 auto;">
     <h1 class="mb-3">Analysis Result</h1>
 
     <div class="alert alert-@verdictAlertClass mb-4">
-        <span class="verdict-badge verdict-@verdictSlug">@Html.Raw(verdictIcon) @Model.Verdict</span>
+        <span class="verdict-badge verdict-@verdictSlug">@Html.Raw(IconHelper.VerdictIcon(Model.Verdict)) @Model.Verdict</span>
         &nbsp;&mdash;&nbsp; Confidence: <strong>@Model.ConfidenceScore.ToString("P0")</strong>
     </div>
 

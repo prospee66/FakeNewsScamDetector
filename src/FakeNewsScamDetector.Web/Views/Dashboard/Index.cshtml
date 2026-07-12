@@ -45,7 +45,7 @@ else
                 <tr>
                     <td class="text-muted">@item.AnalyzedAtUtc.ToString("g")</td>
                     <td>@(item.InputText.Length > 60 ? item.InputText[..60] + "…" : item.InputText)</td>
-                    <td><span class="verdict-badge verdict-@verdictSlug">@item.Verdict</span></td>
+                    <td><span class="verdict-badge verdict-@verdictSlug">@Html.Raw(IconHelper.VerdictIcon(item.Verdict)) @item.Verdict</span></td>
                     <td>@item.ConfidenceScore.ToString("P0")</td>
                 </tr>
             }

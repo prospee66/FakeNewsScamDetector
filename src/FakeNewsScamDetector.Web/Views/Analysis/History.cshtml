@@ -33,9 +33,9 @@ else
                 <tr>
                     <td class="text-muted">@item.AnalyzedAtUtc.ToString("g")</td>
                     <td>@(item.InputText.Length > 70 ? item.InputText[..70] + "…" : item.InputText)</td>
-                    <td><span class="verdict-badge verdict-@verdictSlug">@item.Verdict</span></td>
+                    <td><span class="verdict-badge verdict-@verdictSlug">@Html.Raw(IconHelper.VerdictIcon(item.Verdict)) @item.Verdict</span></td>
                     <td>@item.ConfidenceScore.ToString("P0")</td>
-                    <td><a asp-controller="Analysis" asp-action="Result" asp-route-id="@item.Id">View &rarr;</a></td>
+                    <td><a asp-controller="Analysis" asp-action="Result" asp-route-id="@item.Id">View @Html.Raw(IconHelper.Svg("arrow-right"))</a></td>
                 </tr>
             }
         </tbody>
