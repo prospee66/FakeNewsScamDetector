@@ -27,6 +27,28 @@
         This is an automated pattern-matching signal, not a fact-check or a guarantee. Treat it as a prompt to look closer, not a final answer &mdash; verify independently before acting, especially for anything financial or time-pressured.
     </p>
 
+    @if (Model.FactCheckFindings.Count > 0)
+    {
+        <div class="card mb-4" style="border-color: var(--color-primary); border-width: 1.5px;">
+            <div class="card-body">
+                <h5 class="mb-1" style="font-size: 1rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-primary-dark);">Reviewed by Independent Fact-Checkers</h5>
+                <p class="text-muted mb-3" style="font-size: 0.85rem;">These are real published reviews of a similar claim &mdash; read the source, not just the label below.</p>
+                @foreach (var finding in Model.FactCheckFindings)
+                {
+                    <div class="mb-3 pb-3" style="border-bottom: 1px solid var(--color-border);">
+                        <span class="verdict-badge" style="background: var(--color-primary-soft); color: var(--color-primary-dark);">@finding.TextualRating</span>
+                        <span class="text-muted" style="font-size: 0.85rem;"> &mdash; @finding.Publisher</span>
+                        <p class="mb-1 mt-1">@finding.ClaimText</p>
+                        @if (!string.IsNullOrEmpty(finding.ReviewUrl))
+                        {
+                            <a href="@finding.ReviewUrl" target="_blank" rel="noopener noreferrer" style="font-size: 0.85rem;">Read the full review &rarr;</a>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+
     <div class="card mb-4">
         <div class="card-body">
             <h5 class="mb-3" style="font-size: 1rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-muted);">Score Breakdown</h5>

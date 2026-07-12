@@ -9,15 +9,18 @@ public class VerdictAggregator
     private readonly ITextClassifierService _classifier;
     private readonly IUrlAnalyzerService _urlAnalyzer;
     private readonly IScamRuleEngine _ruleEngine;
+    private readonly IFactCheckClient _factCheckClient;
 
     public VerdictAggregator(
         ITextClassifierService classifier,
         IUrlAnalyzerService urlAnalyzer,
-        IScamRuleEngine ruleEngine)
+        IScamRuleEngine ruleEngine,
+        IFactCheckClient factCheckClient)
     {
         _classifier = classifier;
         _urlAnalyzer = urlAnalyzer;
         _ruleEngine = ruleEngine;
+        _factCheckClient = factCheckClient;
     }
 
     public async Task<AnalysisResult> AnalyzeAsync(string inputText)
@@ -32,6 +35,13 @@ public class VerdictAggregator
         var (urlRisk, urlReasons) = url is not null
             ? await _urlAnalyzer.AnalyzeUrlRiskAsync(url)
             : (0.0, new List<string>());
+        // Fact-check findings are deliberately excluded from the confidence
+        // score: textual ratings ("False", "Pants on Fire", "Mixture", ...)
+        // vary by publisher and aren't safe to auto-map onto a fake/not-fake
+        // scale. They're surfaced verbatim on the result page instead, so
+        // the user reads the actual rating and source rather than trusting
+        // an automated reinterpretation of it.
+        var factCheckFindings = await _factCheckClient.SearchClaimsAsync(textOnly);
 
         var mlScore = Math.Max(fakeNewsScore, scamScore);
         var confidence = (mlScore * 0.5) + (ruleScore * 0.3) + (urlRisk * 0.2);
@@ -55,6 +65,7 @@ public class VerdictAggregator
             RuleScore = ruleScore,
             UrlRiskScore = urlRisk,
             Reasons = reasons,
+            FactCheckFindings = factCheckFindings,
             AnalyzedAtUtc = DateTime.UtcNow
         };
     }

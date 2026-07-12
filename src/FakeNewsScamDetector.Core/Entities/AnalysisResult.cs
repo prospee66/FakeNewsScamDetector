@@ -13,5 +13,6 @@ public class AnalysisResult
     public double RuleScore { get; set; }
     public double UrlRiskScore { get; set; }
     public List<string> Reasons { get; set; } = new();
+    public List<FactCheckFinding> FactCheckFindings { get; set; } = new();
     public DateTime AnalyzedAtUtc { get; set; } = DateTime.UtcNow;
 }
