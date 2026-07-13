@@ -16,28 +16,30 @@
 }
 else
 {
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Text</th>
-                <th>Verdict</th>
-                <th>Confidence</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                var verdictSlug = item.Verdict.ToString().ToLowerInvariant();
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td class="text-muted">@item.AnalyzedAtUtc.ToString("g")</td>
-                    <td>@(item.InputText.Length > 70 ? item.InputText[..70] + "…" : item.InputText)</td>
-                    <td><span class="verdict-badge verdict-@verdictSlug">@Html.Raw(IconHelper.VerdictIcon(item.Verdict)) @item.Verdict</span></td>
-                    <td>@item.ConfidenceScore.ToString("P0")</td>
-                    <td><a asp-controller="Analysis" asp-action="Result" asp-route-id="@item.Id">View @Html.Raw(IconHelper.Svg("arrow-right"))</a></td>
+                    <th>Date</th>
+                    <th>Text</th>
+                    <th>Verdict</th>
+                    <th>Confidence</th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    var verdictSlug = item.Verdict.ToString().ToLowerInvariant();
+                    <tr>
+                        <td class="text-muted text-nowrap">@item.AnalyzedAtUtc.ToString("g")</td>
+                        <td>@(item.InputText.Length > 70 ? item.InputText[..70] + "…" : item.InputText)</td>
+                        <td class="text-nowrap"><span class="verdict-badge verdict-@verdictSlug">@Html.Raw(IconHelper.VerdictIcon(item.Verdict)) @item.Verdict</span></td>
+                        <td class="text-nowrap">@item.ConfidenceScore.ToString("P0")</td>
+                        <td class="text-nowrap"><a asp-controller="Analysis" asp-action="Result" asp-route-id="@item.Id">View @Html.Raw(IconHelper.Svg("arrow-right"))</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }

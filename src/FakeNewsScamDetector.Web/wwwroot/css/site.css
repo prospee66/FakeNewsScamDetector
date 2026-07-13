@@ -48,6 +48,7 @@
 
 html {
   font-size: 16px;
+  overflow-x: hidden;
 }
 
 body {
@@ -334,23 +335,23 @@ a:hover {
 .hero-intro::after {
   content: "";
   position: absolute;
-  width: 420px;
-  height: 420px;
+  width: min(420px, 65vw);
+  height: min(420px, 65vw);
   border-radius: 50%;
-  filter: blur(90px);
+  filter: blur(70px);
   z-index: -1;
-  top: -230px;
+  top: -180px;
   left: 50%;
 }
 
 .hero-intro::before {
   background: radial-gradient(circle, rgba(139, 125, 251, 0.45), transparent 70%);
-  transform: translateX(-85%);
+  transform: translate(-65%, 0);
 }
 
 .hero-intro::after {
   background: radial-gradient(circle, rgba(91, 75, 245, 0.4), transparent 70%);
-  transform: translateX(10%);
+  transform: translate(-25%, 0);
 }
 
 .hero .hero-eyebrow {
@@ -510,4 +511,43 @@ a:hover {
   text-align: center;
   color: var(--color-text-muted);
   font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   Responsive tweaks
+   ========================================================================== */
+@media (max-width: 576px) {
+  .hero {
+    padding: 3rem 0.75rem 2.5rem;
+  }
+
+  .hero-trust {
+    gap: 0.4rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .score-row .score-label {
+    width: 92px;
+    font-size: 0.82rem;
+  }
+
+  .card .card-body {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .score-row {
+    flex-wrap: wrap;
+    gap: 0.35rem 0.9rem;
+  }
+
+  .score-row .score-label {
+    width: auto;
+  }
+
+  .score-row .score-track {
+    flex-basis: 100%;
+    order: 3;
+  }
 }
