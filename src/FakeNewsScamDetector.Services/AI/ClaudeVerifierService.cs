@@ -5,13 +5,9 @@ using Microsoft.Extensions.Logging;
 
 namespace FakeNewsScamDetector.Services.AI;
 
-/// <summary>
-/// Conducts a conversational verification chat via the Anthropic Messages API.
-/// Not currently wired up in Program.cs (superseded by GeminiVerifierService,
-/// which has a genuine free tier) — kept as a working, tested alternative
-/// implementation of IConversationalVerifierService in case Claude access is
-/// added later.
-/// </summary>
+// Talks to the Anthropic Messages API. Not registered in Program.cs right now
+// since Claude needs a paid credit balance and Gemini doesn't - left in place
+// in case that changes later, still passes its own tests.
 public class ClaudeVerifierService : IConversationalVerifierService
 {
     private const string AnthropicVersion = "2023-06-01";

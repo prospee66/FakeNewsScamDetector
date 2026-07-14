@@ -15,12 +15,9 @@ public class AnalysisResult
     public List<string> Reasons { get; set; } = new();
     public List<FactCheckFinding> FactCheckFindings { get; set; } = new();
 
-    /// <summary>
-    /// "role: content" lines from an AI conversational verification session,
-    /// when this result came from the chat flow rather than the ML pipeline.
-    /// Stored via a JSON converter (not the pipe-joined Reasons pattern)
-    /// because free-form chat text can contain literal '|' characters.
-    /// </summary>
+    // Only set when this result came from the AI chat flow instead of the
+    // ML pipeline. Stored as JSON, not pipe-joined like Reasons, since chat
+    // text can contain a literal "|".
     public List<string> ConversationTranscript { get; set; } = new();
 
     public DateTime AnalyzedAtUtc { get; set; } = DateTime.UtcNow;

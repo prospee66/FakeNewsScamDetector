@@ -4,18 +4,11 @@
 
 <div class="hero">
     <div class="hero-intro">
-        <span class="hero-eyebrow">ML + Rule-Based Detection</span>
-        <h1>Spot <span class="accent">scams and fake news</span><br>before they spot you.</h1>
-        <p class="lead">Paste a message, news snippet, or link. Truthlens checks it against a trained classifier, a scam-pattern rule engine, and URL risk heuristics &mdash; and tells you exactly why.</p>
+        <h1>Check if something is a scam or fake news</h1>
+        <p class="lead">Paste in a message, news snippet, or link. It gets checked against a trained classifier, a scam-pattern rule engine, and some URL checks, and you get a verdict with the reasons behind it.</p>
         <a asp-controller="Analysis" asp-action="Index" class="btn btn-primary btn-lg">
             Analyze Text or URL @Html.Raw(IconHelper.Svg("arrow-right"))
         </a>
-
-        <div class="hero-trust">
-            <span>@Html.Raw(IconHelper.Svg("check-circle")) Free, no sign-up</span>
-            <span>@Html.Raw(IconHelper.Svg("check-circle")) Works with text or links</span>
-            <span>@Html.Raw(IconHelper.Svg("check-circle")) Explains its reasoning</span>
-        </div>
     </div>
 
     <div class="feature-grid">

@@ -6,17 +6,12 @@ using Microsoft.Extensions.Configuration;
 
 namespace FakeNewsScamDetector.Services.ExternalApis;
 
-/// <summary>
-/// Searches Google's Fact Check Tools API (claims:search) for existing,
-/// human-written fact-check reviews matching the input text. This is
-/// deliberately *not* a classifier trying to decide truth itself — it
-/// surfaces what professional fact-checkers (Snopes, PolitiFact, Reuters,
-/// etc.) have already published about similar claims, verbatim, so the user
-/// can judge the source and rating themselves. Most arbitrary input won't
-/// match anything (the API only indexes claims that have been formally
-/// reviewed), which is itself meaningful: no match means "no one has
-/// fact-checked this specific claim," not "this is true."
-/// </summary>
+// Hits Google's Fact Check Tools API to see if anyone (Snopes, PolitiFact,
+// etc.) has already reviewed a similar claim. We don't try to judge truth
+// ourselves here - just surface what's been published and let the user read
+// it. Most input won't match anything since the API only covers claims that
+// were formally reviewed, and that's fine - no match just means "nobody's
+// fact-checked this one," not that it's true.
 public class FactCheckClient : IFactCheckClient
 {
     private const int MaxQueryLength = 200;

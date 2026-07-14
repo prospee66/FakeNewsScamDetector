@@ -8,7 +8,7 @@ namespace FakeNewsScamDetector.Tests;
 public class GeminiVerifierServiceTests
 {
     [Fact]
-    public async Task AskAsync_WithoutApiKeyConfigured_ReturnsFallbackMessageWithoutCallingApi()
+    public async Task ReturnsFallbackWhenApiKeyMissing()
     {
         var config = new ConfigurationBuilder().AddInMemoryCollection().Build();
         var service = new GeminiVerifierService(new HttpClient(), config, NullLogger<GeminiVerifierService>.Instance);

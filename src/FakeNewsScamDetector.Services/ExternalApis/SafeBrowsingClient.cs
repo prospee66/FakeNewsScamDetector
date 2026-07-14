@@ -5,13 +5,11 @@ using Microsoft.Extensions.Configuration;
 
 namespace FakeNewsScamDetector.Services.ExternalApis;
 
-/// <summary>
-/// Checks a URL against Google Safe Browsing's threatMatches:find endpoint
-/// (v4 Lookup API). Requires an API key (see appsettings "SafeBrowsing:ApiKey",
-/// normally supplied via `dotnet user-secrets` — never commit a real key).
-/// Without a key configured, every check reports "not flagged" so the app
-/// still runs; this is a genuine "we didn't check", not evidence of safety.
-/// </summary>
+// Calls Google Safe Browsing's threatMatches:find (v4 lookup) to check a URL
+// against their known-threat lists. Needs SafeBrowsing:ApiKey in config -
+// set that via user-secrets locally, never commit a real key. If there's no
+// key configured we just report "not flagged" so the rest of the app keeps
+// working, but that's really "we didn't check", not a clean bill of health.
 public class SafeBrowsingClient : ISafeBrowsingClient
 {
     private static readonly string[] ThreatTypes =

@@ -1,10 +1,7 @@
 namespace FakeNewsScamDetector.Services.AI;
 
-/// <summary>
-/// Shared across every IConversationalVerifierService implementation so the
-/// assistant's behavior doesn't drift depending on which provider is active.
-/// Placeholder — replace with real instructions if the user supplies them.
-/// </summary>
+// Both verifier implementations point at this same prompt so switching
+// providers doesn't change how the assistant behaves.
 public static class VerificationSystemPrompt
 {
     public const string Text = """

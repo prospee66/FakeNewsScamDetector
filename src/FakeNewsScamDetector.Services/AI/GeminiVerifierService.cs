@@ -5,13 +5,9 @@ using Microsoft.Extensions.Logging;
 
 namespace FakeNewsScamDetector.Services.AI;
 
-/// <summary>
-/// Conducts a conversational verification chat via Google's Gemini
-/// generateContent REST API — chosen over the Claude implementation because
-/// Gemini has a genuine free tier (no prepaid credit balance required).
-/// Same VerificationSystemPrompt and VERDICT: line contract as
-/// ClaudeVerifierService, so ChatController works unchanged against either.
-/// </summary>
+// Talks to Gemini's generateContent endpoint. Using Gemini instead of Claude
+// here because it has a free tier - swapping this out for ClaudeVerifierService
+// later shouldn't require touching ChatController at all.
 public class GeminiVerifierService : IConversationalVerifierService
 {
     private const string EndpointTemplate = "https://generativelanguage.googleapis.com/v1beta/models/{0}:generateContent?key={1}";

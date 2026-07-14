@@ -74,9 +74,8 @@ public class ChatController : Controller
         {
             InputText = firstUserMessage,
             Verdict = verdict,
-            // A conversational verdict isn't produced by the scored ML/rule
-            // pipeline, so there's no comparable confidence number to report —
-            // 0.5 is a neutral placeholder, not a measured probability.
+            // no scored pipeline ran here, so there's nothing real to put in
+            // ConfidenceScore - 0.5 is just a placeholder, not a measurement
             ConfidenceScore = 0.5,
             MlScore = 0,
             RuleScore = 0,

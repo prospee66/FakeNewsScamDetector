@@ -5,15 +5,13 @@ using FakeNewsScamDetector.Core.Interfaces;
 
 namespace FakeNewsScamDetector.Services.ExternalApis;
 
-/// <summary>
-/// Looks up a domain's registration date via the raw WHOIS protocol (RFC 3912,
-/// TCP port 43) — no API key required. Queries IANA's root WHOIS server to find
-/// the authoritative registry for the domain's TLD, then queries that registry
-/// directly and parses the creation date out of its free-text response.
-/// WHOIS response formats vary by registry and aren't guaranteed to be parseable;
-/// any failure (timeout, unknown format, unregistered domain) degrades to null so
-/// callers can treat domain age as an unknown, neutral signal rather than erroring.
-/// </summary>
+// Gets a domain's registration date the old-fashioned way: raw WHOIS over
+// TCP port 43 (RFC 3912), no API key needed. First asks IANA which registry
+// is authoritative for the TLD, then queries that registry directly and
+// pulls the creation date out of whatever free-text format it replies with.
+// Registries don't all format this the same way, so anything we can't parse
+// (or any network hiccup) just comes back as null - domain age becomes an
+// unknown signal rather than blowing up the request.
 public class WhoisLookupClient : IWhoisLookupClient
 {
     private static readonly TimeSpan QueryTimeout = TimeSpan.FromSeconds(4);

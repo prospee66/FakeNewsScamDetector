@@ -1,10 +1,7 @@
 namespace FakeNewsScamDetector.Core.Entities;
 
-/// <summary>
-/// One professional fact-checker's review of a claim, surfaced verbatim so
-/// the user can judge the source and rating themselves rather than trusting
-/// an automated verdict on a truth question.
-/// </summary>
+// One fact-checker's review of a claim, shown as-is so the user can judge
+// the source and rating themselves.
 public class FactCheckFinding
 {
     public string ClaimText { get; set; } = string.Empty;

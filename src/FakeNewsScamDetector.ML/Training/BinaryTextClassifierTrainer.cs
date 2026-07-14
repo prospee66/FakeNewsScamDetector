@@ -9,12 +9,10 @@ public record TrainingResult(
     string AlgorithmName,
     BinaryClassificationMetrics Metrics);
 
-/// <summary>
-/// Shared pipeline for the fake-news and scam classifiers: cross-validates a
-/// handful of ML.NET binary trainers on the same featurized text, picks the
-/// one with the best average AUC, then refits it on the train split and
-/// evaluates on a held-out test split.
-/// </summary>
+// Both the fake-news and scam classifiers go through this same pipeline:
+// try a few different trainers with cross-validation, keep whichever gets
+// the best average AUC, then refit it on the full train split and score it
+// against the held-out test split.
 public static class BinaryTextClassifierTrainer
 {
     public static TrainingResult TrainBest(

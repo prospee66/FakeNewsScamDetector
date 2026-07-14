@@ -8,7 +8,7 @@ namespace FakeNewsScamDetector.Tests;
 public class ClaudeVerifierServiceTests
 {
     [Fact]
-    public async Task AskAsync_WithoutApiKeyConfigured_ReturnsFallbackMessageWithoutCallingApi()
+    public async Task ReturnsFallbackWhenApiKeyMissing()
     {
         var config = new ConfigurationBuilder().AddInMemoryCollection().Build();
         var service = new ClaudeVerifierService(new HttpClient(), config, NullLogger<ClaudeVerifierService>.Instance);

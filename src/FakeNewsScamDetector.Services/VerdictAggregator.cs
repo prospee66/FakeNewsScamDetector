@@ -35,12 +35,10 @@ public class VerdictAggregator
         var (urlRisk, urlReasons) = url is not null
             ? await _urlAnalyzer.AnalyzeUrlRiskAsync(url)
             : (0.0, new List<string>());
-        // Fact-check findings are deliberately excluded from the confidence
-        // score: textual ratings ("False", "Pants on Fire", "Mixture", ...)
-        // vary by publisher and aren't safe to auto-map onto a fake/not-fake
-        // scale. They're surfaced verbatim on the result page instead, so
-        // the user reads the actual rating and source rather than trusting
-        // an automated reinterpretation of it.
+        // not folding fact-check ratings into the score - publishers use
+        // different rating scales ("Pants on Fire", "Mixture", etc.) that
+        // don't map cleanly onto a fake/not-fake number, so we just show
+        // them as-is on the result page instead of guessing
         var factCheckFindings = await _factCheckClient.SearchClaimsAsync(textOnly);
 
         var mlScore = Math.Max(fakeNewsScore, scamScore);
