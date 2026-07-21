@@ -3,13 +3,34 @@
 }
 
 <div class="hero">
-    <div class="hero-intro">
-        <span class="kicker">Scam &amp; fake news detection</span>
-        <h1>Check if something is a scam or fake news</h1>
-        <p class="lead">Paste in a message, news snippet, or link. It gets checked against a trained classifier, a scam-pattern rule engine, and some URL checks, and you get a verdict with the reasons behind it.</p>
-        <a asp-controller="Analysis" asp-action="Index" class="btn btn-primary btn-lg">
-            Analyze Text or URL @Html.Raw(IconHelper.Svg("arrow-right"))
-        </a>
+    <div class="hero-top">
+        <div class="hero-intro">
+            <span class="kicker">Scam &amp; fake news detection</span>
+            <h1>Check if something is a scam or fake news</h1>
+            <p class="lead">Paste in a message, news snippet, or link. It gets checked against a trained classifier, a scam-pattern rule engine, and some URL checks, and you get a verdict with the reasons behind it.</p>
+            <a asp-controller="Analysis" asp-action="Index" class="btn btn-primary btn-lg">
+                Analyze Text or URL @Html.Raw(IconHelper.Svg("arrow-right"))
+            </a>
+        </div>
+
+        <div class="hero-sample">
+            <span class="hero-sample-tag">Example scan</span>
+            <div class="hero-sample-card">
+                <div class="hero-sample-head">
+                    <span class="verdict-badge verdict-scam">@Html.Raw(IconHelper.Svg("alert-octagon")) Scam</span>
+                    <span class="hero-sample-score">87%</span>
+                </div>
+                <p class="hero-sample-text">&ldquo;Your account will be suspended. Verify now by sending your SSN and a $50 gift card&hellip;&rdquo;</p>
+                <div class="hero-sample-bar">
+                    <span class="hero-bar-label">ML Model</span>
+                    <div class="hero-bar-track"><div class="hero-bar-fill" style="width: 91%;"></div></div>
+                </div>
+                <div class="hero-sample-bar">
+                    <span class="hero-bar-label">Rule Engine</span>
+                    <div class="hero-bar-track"><div class="hero-bar-fill" style="width: 70%;"></div></div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="editorial-list">
