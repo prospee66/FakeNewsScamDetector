@@ -24,7 +24,6 @@
   --radius-lg: 20px;
 
   --font-body: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
-  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
 
   --shadow-sm: 0 1px 2px rgba(20, 20, 43, 0.06);
   --shadow-md: 0 8px 24px rgba(20, 20, 43, 0.08);
@@ -73,15 +72,6 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--color-text);
-}
-
-/* Editorial headline treatment: a serif display face for page titles only -
-   h2-h6 (card labels, section headings) stay on the sans body font since a
-   serif reads great big and bold but gets fussy at small UI sizes. */
-h1 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: -0.01em;
 }
 
 /* Small uppercase label that sits above a page title - "issue contents"
@@ -155,14 +145,13 @@ a:hover {
 }
 
 .app-nav .navbar-brand {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.3rem;
+  font-weight: 800;
+  font-size: 1.15rem;
   color: var(--color-text) !important;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 .app-nav .navbar-brand .brand-mark {
@@ -490,9 +479,8 @@ a:hover {
 }
 
 .editorial-row .editorial-num {
-  font-family: var(--font-display);
-  font-size: 1.85rem;
-  font-weight: 600;
+  font-size: 1.5rem;
+  font-weight: 700;
   color: var(--color-primary);
   width: 3.25rem;
   flex-shrink: 0;
