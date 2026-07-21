@@ -5,6 +5,7 @@ using FakeNewsScamDetector.ML.Prediction;
 using FakeNewsScamDetector.Services;
 using FakeNewsScamDetector.Services.AI;
 using FakeNewsScamDetector.Services.ExternalApis;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -56,6 +57,20 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+// Render (and most PaaS hosts) terminate TLS at their edge and forward plain
+// HTTP to the container, so Kestrel sees every request as http. Without this,
+// UseHttpsRedirection below sees scheme=http on every request - including
+// ones the browser made over https - and keeps redirecting forever. Clearing
+// KnownNetworks/KnownProxies is required here because the proxy's IP isn't
+// static in a container platform, unlike a fixed on-prem reverse proxy.
+var forwardedHeaderOptions = new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+};
+forwardedHeaderOptions.KnownIPNetworks.Clear();
+forwardedHeaderOptions.KnownProxies.Clear();
+app.UseForwardedHeaders(forwardedHeaderOptions);
 
 app.UseHttpsRedirection();
 app.UseRouting();
