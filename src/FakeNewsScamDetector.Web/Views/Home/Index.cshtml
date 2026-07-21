@@ -2,16 +2,20 @@
     ViewData["Title"] = "Home";
 }
 
-<div class="hero">
-    <div class="hero-intro">
-        <span class="kicker">Scam &amp; fake news detection</span>
-        <h1>See through scams and misinformation.</h1>
-        <p class="lead">Paste a message, article, or link and get a clear verdict in seconds, along with the reasons behind it &mdash; no technical background needed.</p>
-        <a asp-controller="Analysis" asp-action="Index" class="btn btn-primary btn-lg">
-            Analyze Text or URL @Html.Raw(IconHelper.Svg("arrow-right"))
-        </a>
+<div class="hero-banner">
+    <div class="hero-inner">
+        <div class="hero-intro">
+            <span class="kicker">Scam &amp; fake news detection</span>
+            <h1>See through scams and misinformation.</h1>
+            <p class="lead">Paste a message, article, or link and get a clear verdict in seconds, along with the reasons behind it &mdash; no technical background needed.</p>
+            <a asp-controller="Analysis" asp-action="Index" class="btn btn-primary btn-lg">
+                Analyze Text or URL @Html.Raw(IconHelper.Svg("arrow-right"))
+            </a>
+        </div>
     </div>
+</div>
 
+<div class="hero">
     <div class="feature-grid">
         <div class="feature-card">
             <div class="feature-icon">@Html.Raw(IconHelper.Svg("cpu"))</div>
