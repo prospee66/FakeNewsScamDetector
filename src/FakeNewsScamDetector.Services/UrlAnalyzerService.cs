@@ -67,7 +67,13 @@ public class UrlAnalyzerService : IUrlAnalyzerService
             reasons.Add("Domain name contains an unusually high number of hyphens");
         }
 
-        var domainAgeDays = await _whoisClient.GetDomainAgeInDaysAsync(uri.Host);
+        // WHOIS (raw TCP) and Safe Browsing (HTTP) don't depend on each other -
+        // run them side by side instead of one after the other.
+        var domainAgeTask = _whoisClient.GetDomainAgeInDaysAsync(uri.Host);
+        var safeBrowsingTask = _safeBrowsingClient.CheckUrlAsync(url);
+        await Task.WhenAll(domainAgeTask, safeBrowsingTask);
+
+        var domainAgeDays = domainAgeTask.Result;
         if (domainAgeDays is not null)
         {
             if (domainAgeDays < 30)
@@ -82,7 +88,7 @@ public class UrlAnalyzerService : IUrlAnalyzerService
             }
         }
 
-        var safeBrowsingResult = await _safeBrowsingClient.CheckUrlAsync(url);
+        var safeBrowsingResult = safeBrowsingTask.Result;
         if (safeBrowsingResult.IsFlagged)
         {
             risk += 0.60;

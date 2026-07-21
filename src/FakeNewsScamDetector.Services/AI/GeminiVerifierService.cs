@@ -70,6 +70,13 @@ public class GeminiVerifierService : IConversationalVerifierService
             _logger.LogError(ex, "Network error calling the Gemini API.");
             return "Sorry, I couldn't reach the AI verification assistant. Please try again shortly.";
         }
+        catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+        {
+            // The caller didn't cancel - this is HttpClient.Timeout firing, which
+            // surfaces as a TaskCanceledException, not an HttpRequestException.
+            _logger.LogError("Gemini API call timed out.");
+            return "Sorry, the AI verification assistant is taking too long to respond. Please try again shortly.";
+        }
         catch (System.Text.Json.JsonException ex)
         {
             _logger.LogError(ex, "Failed to parse the Gemini API response.");

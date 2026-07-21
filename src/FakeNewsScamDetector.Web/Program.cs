@@ -15,12 +15,17 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddMemoryCache();
 builder.Services.AddScoped<IAnalysisRepository, AnalysisRepository>();
 builder.Services.AddScoped<IScamRuleEngine, ScamRuleEngine>();
 builder.Services.AddSingleton<IWhoisLookupClient, WhoisLookupClient>();
-builder.Services.AddHttpClient<ISafeBrowsingClient, SafeBrowsingClient>();
-builder.Services.AddHttpClient<IFactCheckClient, FactCheckClient>();
-builder.Services.AddHttpClient<IConversationalVerifierService, GeminiVerifierService>();
+// These all default to a 100-second HttpClient timeout, which meant a slow
+// external API (including the Gemini "AI" call) could leave a user staring
+// at a spinner for well over a minute before anything happened. Fail faster
+// so the UI can show a friendly error instead.
+builder.Services.AddHttpClient<ISafeBrowsingClient, SafeBrowsingClient>(c => c.Timeout = TimeSpan.FromSeconds(8));
+builder.Services.AddHttpClient<IFactCheckClient, FactCheckClient>(c => c.Timeout = TimeSpan.FromSeconds(8));
+builder.Services.AddHttpClient<IConversationalVerifierService, GeminiVerifierService>(c => c.Timeout = TimeSpan.FromSeconds(25));
 builder.Services.AddScoped<IUrlAnalyzerService, UrlAnalyzerService>();
 builder.Services.AddScoped<VerdictAggregator>();
 

@@ -2,6 +2,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using FakeNewsScamDetector.Core.Interfaces;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace FakeNewsScamDetector.Services.ExternalApis;
 
@@ -15,13 +16,35 @@ namespace FakeNewsScamDetector.Services.ExternalApis;
 public class WhoisLookupClient : IWhoisLookupClient
 {
     private static readonly TimeSpan QueryTimeout = TimeSpan.FromSeconds(4);
+    // Two round-trips over raw TCP make this the slowest step in a scan, and
+    // a domain's registration date never changes, so caching it avoids paying
+    // that cost again for every scan of the same domain.
+    private static readonly TimeSpan CacheDuration = TimeSpan.FromHours(24);
 
     private static readonly Regex[] CreationDatePatterns =
     [
         new(@"(?:Creation Date|created|Registered on|Domain Registration Date|Registration Time|created-date)\s*:\s*(.+)", RegexOptions.IgnoreCase),
     ];
 
+    private readonly IMemoryCache _cache;
+
+    public WhoisLookupClient(IMemoryCache cache)
+    {
+        _cache = cache;
+    }
+
     public async Task<int?> GetDomainAgeInDaysAsync(string domain, CancellationToken cancellationToken = default)
+    {
+        var cacheKey = $"whois:{domain.ToLowerInvariant()}";
+        if (_cache.TryGetValue(cacheKey, out int? cachedAge))
+            return cachedAge;
+
+        var age = await LookupDomainAgeInDaysAsync(domain, cancellationToken);
+        _cache.Set(cacheKey, age, CacheDuration);
+        return age;
+    }
+
+    private static async Task<int?> LookupDomainAgeInDaysAsync(string domain, CancellationToken cancellationToken)
     {
         try
         {

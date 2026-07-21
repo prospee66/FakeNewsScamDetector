@@ -10,6 +10,13 @@ public class TextClassifierService : ITextClassifierService
     private readonly PredictionEngine<NewsInputData, PredictionOutput>? _fakeNewsEngine;
     private readonly PredictionEngine<ScamInputData, PredictionOutput>? _scamEngine;
 
+    // PredictionEngine isn't thread-safe (see ML.NET docs), but this service is
+    // registered as a singleton so requests from different users hit the same
+    // engine instance concurrently. A lock per engine keeps predictions correct
+    // under load; the alternative (PredictionEnginePool) would need a new package.
+    private readonly object _fakeNewsLock = new();
+    private readonly object _scamLock = new();
+
     public TextClassifierService(string fakeNewsModelPath, string scamModelPath)
     {
         if (File.Exists(fakeNewsModelPath))
@@ -30,8 +37,11 @@ public class TextClassifierService : ITextClassifierService
         if (_fakeNewsEngine is null)
             return Task.FromResult(0.5);
 
-        var result = _fakeNewsEngine.Predict(new NewsInputData { Text = text });
-        return Task.FromResult((double)result.Probability);
+        lock (_fakeNewsLock)
+        {
+            var result = _fakeNewsEngine.Predict(new NewsInputData { Text = text });
+            return Task.FromResult((double)result.Probability);
+        }
     }
 
     public Task<double> PredictScamScoreAsync(string text)
@@ -39,7 +49,10 @@ public class TextClassifierService : ITextClassifierService
         if (_scamEngine is null)
             return Task.FromResult(0.5);
 
-        var result = _scamEngine.Predict(new ScamInputData { Text = text });
-        return Task.FromResult((double)result.Probability);
+        lock (_scamLock)
+        {
+            var result = _scamEngine.Predict(new ScamInputData { Text = text });
+            return Task.FromResult((double)result.Probability);
+        }
     }
 }

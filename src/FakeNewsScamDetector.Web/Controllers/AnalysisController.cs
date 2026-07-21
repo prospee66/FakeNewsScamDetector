@@ -29,7 +29,7 @@ public class AnalysisController : Controller
         if (!ModelState.IsValid)
             return View(nameof(Index), request);
 
-        var result = await _aggregator.AnalyzeAsync(request.InputText);
+        var result = await _aggregator.AnalyzeAsync(request.InputText, HttpContext.RequestAborted);
         var saved = await _repository.AddAsync(result);
 
         return RedirectToAction(nameof(Result), new { id = saved.Id });
