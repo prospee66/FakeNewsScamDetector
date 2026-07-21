@@ -4,6 +4,7 @@
 
 <div class="hero">
     <div class="hero-intro">
+        <span class="kicker">Scam &amp; fake news detection</span>
         <h1>Check if something is a scam or fake news</h1>
         <p class="lead">Paste in a message, news snippet, or link. It gets checked against a trained classifier, a scam-pattern rule engine, and some URL checks, and you get a verdict with the reasons behind it.</p>
         <a asp-controller="Analysis" asp-action="Index" class="btn btn-primary btn-lg">
@@ -11,21 +12,27 @@
         </a>
     </div>
 
-    <div class="feature-grid">
-        <div class="feature-card">
-            <div class="feature-icon">@Html.Raw(IconHelper.Svg("cpu"))</div>
-            <h3>ML-Powered Scoring</h3>
-            <p>An ML.NET classifier trained on labeled examples flags language patterns typical of fake news and scam messaging.</p>
+    <div class="editorial-list">
+        <div class="editorial-row">
+            <span class="editorial-num">01</span>
+            <div>
+                <h3>ML-Powered Scoring</h3>
+                <p>An ML.NET classifier trained on labeled examples flags language patterns typical of fake news and scam messaging.</p>
+            </div>
         </div>
-        <div class="feature-card">
-            <div class="feature-icon">@Html.Raw(IconHelper.Svg("search"))</div>
-            <h3>Rule-Based Signals</h3>
-            <p>A weighted keyword engine catches classic red flags &mdash; urgency, gift cards, wire transfers, and more.</p>
+        <div class="editorial-row">
+            <span class="editorial-num">02</span>
+            <div>
+                <h3>Rule-Based Signals</h3>
+                <p>A weighted keyword engine catches classic red flags &mdash; urgency, gift cards, wire transfers, and more.</p>
+            </div>
         </div>
-        <div class="feature-card">
-            <div class="feature-icon">@Html.Raw(IconHelper.Svg("link"))</div>
-            <h3>URL Risk Analysis</h3>
-            <p>Links are checked for suspicious TLDs, IP-literal hosts, shorteners, and other structural red flags.</p>
+        <div class="editorial-row">
+            <span class="editorial-num">03</span>
+            <div>
+                <h3>URL Risk Analysis</h3>
+                <p>Links are checked for suspicious TLDs, IP-literal hosts, shorteners, and other structural red flags.</p>
+            </div>
         </div>
     </div>
 </div>

@@ -18,7 +18,10 @@
 }
 
 <div style="max-width: 720px; margin: 0 auto;">
-    <h1 class="mb-3">Analysis Result</h1>
+    <div class="page-header">
+        <span class="kicker">Result</span>
+        <h1>Analysis result</h1>
+    </div>
 
     <div class="alert alert-@verdictAlertClass mb-2">
         <span class="verdict-badge verdict-@verdictSlug">@Html.Raw(IconHelper.VerdictIcon(Model.Verdict)) @Model.Verdict</span>
