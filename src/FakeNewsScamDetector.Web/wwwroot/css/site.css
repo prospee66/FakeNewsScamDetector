@@ -136,12 +136,20 @@ a:hover {
 }
 
 .app-nav .nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   font-weight: 600;
   font-size: 0.95rem;
   color: var(--color-text-muted) !important;
   padding: 0.5rem 0.9rem !important;
   border-radius: var(--radius-sm);
   transition: all 0.15s ease;
+}
+
+.app-nav .nav-link .icon {
+  width: 16px;
+  height: 16px;
 }
 
 .app-nav .nav-link:hover {
@@ -152,6 +160,84 @@ a:hover {
 .app-nav .nav-link.active {
   color: var(--color-primary) !important;
   background: var(--color-primary-soft);
+}
+
+/* Toggler button - custom menu/close icons instead of Bootstrap's default
+   background-image hamburger, so it matches the rest of the icon set and can
+   swap to an X while the menu is open. Bootstrap's Collapse plugin keeps the
+   "collapsed" class on this button in sync with whether the panel is shown. */
+/* No display/flex here - Bootstrap's own .navbar-expand-sm .navbar-toggler
+   rule hides this at >=576px, and it lives in a min-width media query with
+   the same specificity as anything we'd add here. Setting display on the
+   unconditional selector would win the cascade (we load after bootstrap.css)
+   and defeat that responsive hide, so sizing that needs display:flex is
+   scoped to the mobile media query below instead. */
+.app-nav .navbar-toggler {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  box-shadow: none;
+}
+
+.app-nav .navbar-toggler:focus {
+  box-shadow: 0 0 0 4px var(--color-primary-soft);
+}
+
+.app-nav .navbar-toggler-icon-open,
+.app-nav .navbar-toggler-icon-close {
+  display: none;
+  color: var(--color-text);
+  font-size: 20px;
+}
+
+.app-nav .navbar-toggler.collapsed .navbar-toggler-icon-open {
+  display: inline-flex;
+}
+
+.app-nav .navbar-toggler:not(.collapsed) .navbar-toggler-icon-close {
+  display: inline-flex;
+}
+
+/* Mobile dropdown panel - previously just Bootstrap's unstyled default list
+   flush against the header. Give it its own card treatment so it reads as
+   part of the product instead of a bare browser-default menu. */
+@media (max-width: 575.98px) {
+  .app-nav .navbar-toggler {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .app-nav .navbar-collapse {
+    margin-top: 0.75rem;
+    padding: 0.35rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+  }
+
+  .app-nav .navbar-nav {
+    width: 100%;
+  }
+
+  .app-nav .nav-item + .nav-item {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .app-nav .nav-link {
+    width: 100%;
+    padding: 0.85rem 0.75rem !important;
+    border-radius: var(--radius-sm);
+  }
+
+  .app-nav .nav-link .icon {
+    width: 18px;
+    height: 18px;
+  }
 }
 
 /* ==========================================================================
