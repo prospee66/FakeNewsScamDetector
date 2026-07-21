@@ -462,41 +462,56 @@ a:hover {
   margin: 0 0 2rem;
 }
 
-/* Numbered contents-page list instead of a row of icon cards - an editorial
-   pattern (see a magazine's table of contents) rather than the icon-tile
-   grid every AI-generated SaaS landing page defaults to. */
-.editorial-list {
+/* Responsive card grid: auto-fit wraps from 3 columns down to 1 as the
+   viewport narrows, no media queries needed. */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
   margin-top: 3rem;
-  border-top: 1px solid var(--color-border);
 }
 
-.editorial-row {
+.feature-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary-soft);
+}
+
+.feature-card .feature-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
   display: flex;
-  align-items: flex-start;
-  gap: 1.5rem;
-  padding: 1.75rem 0;
-  border-bottom: 1px solid var(--color-border);
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
 }
 
-.editorial-row .editorial-num {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--color-primary);
-  width: 3.25rem;
-  flex-shrink: 0;
-  line-height: 1;
+.feature-card .feature-icon .icon {
+  width: 22px;
+  height: 22px;
 }
 
-.editorial-row h3 {
-  font-size: 1.1rem;
-  margin-bottom: 0.35rem;
+.feature-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.4rem;
 }
 
-.editorial-row p {
+.feature-card p {
   color: var(--color-text-muted);
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   margin: 0;
-  max-width: 520px;
 }
 
 /* ==========================================================================
