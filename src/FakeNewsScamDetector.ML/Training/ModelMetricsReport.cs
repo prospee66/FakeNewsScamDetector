@@ -3,6 +3,12 @@ using Microsoft.ML.Data;
 
 namespace FakeNewsScamDetector.ML.Training;
 
+// A snapshot of how well a trained model performed on its held-out test
+// split, saved alongside the model .zip as a sibling .metrics.json file.
+// Serves two purposes: a human-readable summary (Print) and a machine-
+// readable record the trainer can reload later to decide whether a new
+// training run actually improved on what's already saved (see Load/Save
+// and the regression guard in FakeNewsModelTrainer/ScamTextModelTrainer).
 public record ModelMetricsReport(
     string AlgorithmName,
     double Accuracy,

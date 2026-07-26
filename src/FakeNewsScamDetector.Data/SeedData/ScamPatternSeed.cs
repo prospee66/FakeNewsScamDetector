@@ -3,6 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FakeNewsScamDetector.Data.SeedData;
 
+// Seeds a handful of example rows into the ScamPatterns table on database
+// creation, via EF Core's HasData (applied automatically by
+// db.Database.EnsureCreated() in Program.cs). Not currently read by any
+// query - see the comment on ScamPattern itself.
 public static class ScamPatternSeed
 {
     public static void Seed(ModelBuilder modelBuilder)

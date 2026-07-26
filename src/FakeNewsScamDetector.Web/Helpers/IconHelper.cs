@@ -2,10 +2,20 @@ using FakeNewsScamDetector.Core.Enums;
 
 namespace FakeNewsScamDetector.Web.Helpers;
 
+// Hand-written inline SVG icons (Feather-icon style), returned as raw HTML
+// strings for Razor views to output with @Html.Raw(...). Avoids pulling in
+// an icon font or component library for a small, fixed set of icons -
+// each one inherits text color via stroke="currentColor" so it always
+// matches whatever CSS color is applied to its containing element.
 public static class IconHelper
 {
+    // Shared SVG attributes for every icon - consistent size/stroke style
+    // without repeating this string 15 times below.
     private const string Attrs = "class=\"icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"";
 
+    // Looks up an icon by name. Unknown names return an empty string rather
+    // than throwing, so a typo in a view just renders no icon instead of a
+    // 500 error.
     public static string Svg(string name) => name switch
     {
         "shield" =>
@@ -53,6 +63,9 @@ public static class IconHelper
         _ => string.Empty
     };
 
+    // Maps a verdict to the icon shown next to its badge - a checkmark for
+    // Legitimate, a warning triangle for Suspicious, and an octagon (like a
+    // stop sign) for the two "confidently bad" verdicts, Scam and FakeNews.
     public static string VerdictIcon(VerdictType verdict) => verdict switch
     {
         VerdictType.Legitimate => Svg("check-circle"),

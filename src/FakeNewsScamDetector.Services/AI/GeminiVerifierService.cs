@@ -92,6 +92,9 @@ public class GeminiVerifierService : IConversationalVerifierService
         return new GeminiContent(role, [new GeminiPart(message.Content)]);
     }
 
+    // Private DTOs below just mirror the shape of Gemini's generateContent
+    // request/response JSON - see Google's API docs for the full schema.
+    // Kept private since nothing outside this class needs them.
     private record GeminiPart([property: JsonPropertyName("text")] string Text);
 
     private record GeminiContent(

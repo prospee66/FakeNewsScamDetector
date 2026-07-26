@@ -3,8 +3,13 @@ using Microsoft.ML;
 
 namespace FakeNewsScamDetector.ML.Training;
 
+// Entry point for training the scam-text classifier specifically. Mirrors
+// FakeNewsModelTrainer, just pointed at the scam dataset/columns. Invoked
+// by FakeNewsScamDetector.Trainer's Program.cs.
 public class ScamTextModelTrainer
 {
+    // seed: 0 makes the train/test split and any randomized trainer
+    // internals reproducible between runs.
     private readonly MLContext _mlContext = new(seed: 0);
 
     public void TrainAndSave(string datasetPath, string modelOutputPath)
@@ -19,6 +24,8 @@ public class ScamTextModelTrainer
         Console.WriteLine("  Scam Text Model:");
         report.Print();
 
+        // Regression guard - see the matching comment in
+        // FakeNewsModelTrainer for why this check exists.
         var previous = ModelMetricsReport.Load(modelOutputPath);
         if (previous is not null && previous.Auc >= report.Auc)
         {

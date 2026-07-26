@@ -4,6 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FakeNewsScamDetector.Data.Repositories;
 
+// Thin EF Core implementation of IAnalysisRepository - just translates the
+// interface's methods into DbContext calls. Registered as Scoped in
+// Program.cs (one instance per HTTP request, matching AppDbContext's own
+// lifetime).
 public class AnalysisRepository : IAnalysisRepository
 {
     private readonly AppDbContext _context;

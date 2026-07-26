@@ -4,6 +4,11 @@ using FakeNewsScamDetector.Core.Interfaces;
 
 namespace FakeNewsScamDetector.Services;
 
+// The main scan pipeline: takes raw user input, runs it through the ML
+// classifiers, rule engine, URL risk check, and fact-check lookup, then
+// blends the results into a single verdict. This is what AnalysisController
+// calls for the "Analyze Text or URL" feature (the AI Chat feature is a
+// separate path - see ChatController - that doesn't go through here).
 public class VerdictAggregator
 {
     private readonly ITextClassifierService _classifier;
@@ -52,7 +57,16 @@ public class VerdictAggregator
         var (urlRisk, urlReasons) = urlTask.Result;
         var factCheckFindings = factCheckTask.Result;
 
+        // Take whichever ML score is higher - a message can plausibly be
+        // scam-like or fake-news-like, but we only need one verdict, and
+        // DetermineVerdict below uses whichever is higher to decide which.
         var mlScore = Math.Max(fakeNewsScore, scamScore);
+
+        // Weighted blend of all three signals. ML gets the most weight
+        // since it's the most informed single signal; URL risk gets the
+        // least since plenty of legitimate messages don't contain a link
+        // at all (urlRisk is just 0 in that case, so it doesn't drag the
+        // score down unfairly).
         var confidence = (mlScore * 0.5) + (ruleScore * 0.3) + (urlRisk * 0.2);
 
         var verdict = DetermineVerdict(confidence, fakeNewsScore, scamScore);
@@ -79,6 +93,11 @@ public class VerdictAggregator
         };
     }
 
+    // Two hand-picked thresholds turn the continuous 0-1 confidence score
+    // into one of the four VerdictType buckets. Below 0.35 is treated as
+    // clean, 0.35-0.6 as worth a second look but not conclusive, and above
+    // 0.6 as confident enough to call it Scam or FakeNews specifically -
+    // whichever of the two ML scores was higher decides which one.
     private static VerdictType DetermineVerdict(double confidence, double fakeNewsScore, double scamScore)
     {
         if (confidence < 0.35)

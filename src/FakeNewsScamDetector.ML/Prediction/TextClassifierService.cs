@@ -4,9 +4,18 @@ using Microsoft.ML;
 
 namespace FakeNewsScamDetector.ML.Prediction;
 
+// Loads the two pre-trained model .zip files (produced by
+// FakeNewsScamDetector.Trainer, see Training/) once at startup and serves
+// predictions from them. Registered as a singleton in Program.cs so the
+// models are loaded exactly once, not per-request - loading an ML.NET model
+// from disk is relatively expensive.
 public class TextClassifierService : ITextClassifierService
 {
     private readonly MLContext _mlContext = new();
+
+    // Null if the corresponding model file wasn't found at startup (e.g. in
+    // a dev environment before ever running the Trainer project). Callers
+    // fall back to a neutral 0.5 score in that case rather than throwing.
     private readonly PredictionEngine<NewsInputData, PredictionOutput>? _fakeNewsEngine;
     private readonly PredictionEngine<ScamInputData, PredictionOutput>? _scamEngine;
 
@@ -17,6 +26,8 @@ public class TextClassifierService : ITextClassifierService
     private readonly object _fakeNewsLock = new();
     private readonly object _scamLock = new();
 
+    // Paths are resolved by the caller (see Program.cs) since this class
+    // shouldn't need to know about ASP.NET Core's content-root conventions.
     public TextClassifierService(string fakeNewsModelPath, string scamModelPath)
     {
         if (File.Exists(fakeNewsModelPath))
@@ -32,6 +43,9 @@ public class TextClassifierService : ITextClassifierService
         }
     }
 
+    // Synchronous under the hood (ML.NET's Predict has no async API) but
+    // kept as Task<double> to match ITextClassifierService, which other
+    // async-only implementations (or a future remote model) might need.
     public Task<double> PredictFakeNewsScoreAsync(string text)
     {
         if (_fakeNewsEngine is null)

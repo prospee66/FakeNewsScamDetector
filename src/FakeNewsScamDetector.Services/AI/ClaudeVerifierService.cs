@@ -88,6 +88,8 @@ public class ClaudeVerifierService : IConversationalVerifierService
         }
     }
 
+    // Private DTOs below just mirror the shape of Anthropic's Messages API
+    // request/response JSON - see Anthropic's API docs for the full schema.
     private record AnthropicRequest(
         [property: JsonPropertyName("model")] string Model,
         [property: JsonPropertyName("max_tokens")] int MaxTokens,

@@ -2,9 +2,18 @@ using FakeNewsScamDetector.Core.Interfaces;
 
 namespace FakeNewsScamDetector.Services;
 
+// Scores a single URL for scam/phishing risk using a mix of cheap
+// structural checks (done first, no network calls) and two external checks
+// (WHOIS domain age, Google Safe Browsing). Each check that fires adds to
+// a running risk total, capped at 1.0.
 public class UrlAnalyzerService : IUrlAnalyzerService
 {
+    // Cheap top-level domains that legitimate sites rarely use, but scam
+    // sites favor because they're cheap/easy to register in bulk.
     private static readonly string[] SuspiciousTlds = [".xyz", ".top", ".click", ".loan", ".gq", ".tk", ".ml"];
+
+    // Common URL shorteners - not inherently malicious, but they hide the
+    // real destination, which is itself a mild risk signal.
     private static readonly string[] UrlShorteners = ["bit.ly", "tinyurl.com", "t.co", "goo.gl", "is.gd"];
 
     private readonly IWhoisLookupClient _whoisClient;
@@ -18,6 +27,9 @@ public class UrlAnalyzerService : IUrlAnalyzerService
 
     public async Task<(double Score, List<string> Reasons)> AnalyzeUrlRiskAsync(string url)
     {
+        // Can't parse it as a URL at all - treat as moderately risky rather
+        // than 0 (clean) or 1 (certainly bad), since a malformed link is
+        // suspicious but not proof of anything.
         if (!Uri.TryCreate(url, UriKind.Absolute, out var uri))
             return (0.5, []);
 
