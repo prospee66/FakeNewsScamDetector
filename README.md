@@ -34,11 +34,11 @@ To train:
 dotnet run --project src/FakeNewsScamDetector.Trainer --configuration Release
 ```
 
-For each dataset, the trainer 5-fold cross-validates three ML.NET algorithms (FastTree, LightGbm, SdcaLogisticRegression), picks the best by AUC, refits it, and evaluates on a held-out test split. A model is only saved over the existing one if its AUC is higher — metrics for the currently-saved model live alongside it as `TrainedModels/*.metrics.json`. Latest results:
+For each dataset, the trainer 5-fold cross-validates five ML.NET algorithms (FastTree, LightGbm, SdcaLogisticRegression, LbfgsLogisticRegression, SgdCalibrated), picks the best by AUC, refits it, and evaluates on a held-out test split. A model is only saved over the existing one if its AUC is higher — metrics for the currently-saved model live alongside it as `TrainedModels/*.metrics.json`. Latest results:
 
 | Model | Algorithm | Accuracy | AUC | F1 |
 |---|---|---|---|---|
-| Fake News | SdcaLogisticRegression | 61.7% | 66.0% | 56.7% |
+| Fake News | SgdCalibrated | 62.8% | 67.3% | 52.1% |
 | Scam Text | FastTree | 98.6% | 99.2% | 94.9% |
 
 The fake-news number looks low next to the scam number because LIAR is a genuinely hard benchmark (short political claims judged without context) — published baselines on it are typically in the same 60-70% range. Scam/spam detection is a much easier signal.
